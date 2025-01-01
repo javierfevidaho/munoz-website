@@ -18,7 +18,6 @@ export async function POST(req: Request) {
       }
     });
 
-    // Enviar mensaje a WhatsApp
     const message = `Nueva cita:\nNombre: ${data.name}\nEmail: ${data.email}\nTeléfono: ${data.phone}\nFecha: ${new Date(data.date).toLocaleDateString()}\nHora: ${data.time}\nServicio: ${data.service}\nMensaje: ${data.message}`;
     
     return NextResponse.json({ 
@@ -35,7 +34,7 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const appointments = await prisma.appointment.findMany({
       orderBy: {
