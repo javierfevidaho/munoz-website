@@ -1,51 +1,64 @@
+'use client';
+
+import React from 'react';
+
 const ServicesPage = () => {
   const mainServices = [
     {
       title: "Declaración de Impuestos Personales",
-      description: "Maximiza tu devolución con nuestro servicio experto de declaración de impuestos personales.",
+      description: "Maximiza tu devolución con nuestro servicio experto de declaración de impuestos personales. Manejamos todo tipo de declaraciones individuales y familiares.",
       price: "Desde $150",
       features: [
         "Declaraciones federales y estatales",
-        "Revisión de deducciones",
-        "Asesoría personalizada",
-        "Presentación electrónica"
+        "W-2 y 1099s",
+        "Deducciones detalladas",
+        "Créditos fiscales",
+        "Revisión de años anteriores"
       ]
     },
     {
       title: "Impuestos Empresariales",
-      description: "Servicios completos de impuestos para negocios de todos los tamaños.",
+      description: "Servicios completos de impuestos para negocios de todos los tamaños. Optimizamos tu situación fiscal empresarial.",
       price: "Desde $299",
       features: [
         "Declaraciones corporativas",
         "Schedule C para autónomos",
+        "Nómina y pagos trimestrales",
         "Planificación fiscal",
-        "Reportes trimestrales"
+        "Asesoría continua"
       ]
     },
     {
       title: "Consultoría Fiscal",
-      description: "Asesoramiento estratégico para optimizar tu situación fiscal.",
+      description: "Asesoramiento estratégico personalizado para optimizar tu situación fiscal y maximizar beneficios a largo plazo.",
       price: "Desde $499",
       features: [
         "Análisis fiscal completo",
         "Estrategias de ahorro",
-        "Planificación anual",
-        "Consultas ilimitadas"
+        "Planificación patrimonial",
+        "Consultas ilimitadas",
+        "Representación ante el IRS"
       ]
     }
   ];
 
+  const handleContactClick = () => {
+    window.location.href = '/contacto';
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
       <div className="bg-blue-800 text-white py-16">
         <div className="max-w-6xl mx-auto px-4">
           <h1 className="text-4xl font-bold mb-4 text-center">Nuestros Servicios</h1>
-          <p className="text-xl text-center">
+          <p className="text-xl text-center max-w-2xl mx-auto">
             Soluciones fiscales integrales para individuos y empresas
           </p>
         </div>
       </div>
 
+      {/* Services Grid */}
       <div className="max-w-6xl mx-auto px-4 py-16">
         <div className="grid md:grid-cols-3 gap-8">
           {mainServices.map((service, index) => (
@@ -68,14 +81,30 @@ const ServicesPage = () => {
                   ))}
                 </ul>
                 <button 
-                  onClick={() => window.location.href = '/contacto'}
-                  className="block w-full text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+                  onClick={handleContactClick}
+                  className="block w-full text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   Solicitar Servicio
                 </button>
               </div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="bg-gray-100 py-16">
+        <div className="max-w-4xl mx-auto text-center px-4">
+          <h2 className="text-3xl font-bold mb-4">¿Necesitas un servicio personalizado?</h2>
+          <p className="text-xl text-gray-600 mb-8">
+            Contáctanos para discutir tus necesidades específicas y obtener una cotización a medida
+          </p>
+          <button
+            onClick={handleContactClick}
+            className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          >
+            Contactar Ahora
+          </button>
         </div>
       </div>
     </div>
