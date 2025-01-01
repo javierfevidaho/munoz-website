@@ -5,9 +5,9 @@ import React from 'react';
 const ContactPage = () => {
   const phoneNumber = "9862269662";
 
-  const handleWhatsAppClick = () => {
-    window.open(`https://wa.me/${phoneNumber}`, '_blank');
-  };
+  //const handleWhatsAppClick = () => {
+  //  window.open(`https://wa.me/${phoneNumber}`, '_blank');
+  //};
 
   return (
     <div className="min-h-screen bg-gray-50">
