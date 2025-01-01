@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Calendar, Clock, User, Phone, Mail, MessageSquare } from 'lucide-react';
+import { Calendar, Clock, User,  MessageSquare } from 'lucide-react';
 
 interface TimeSlot {
   hour: string;
