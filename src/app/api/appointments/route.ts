@@ -7,59 +7,68 @@ export async function POST(req: Request) {
   try {
     const data = await req.json();
 
-    // Validar los datos de entrada
-    if (!data.name || !data.email || !data.phone || !data.date || !data.time || !data.service) {
+    // Validación de campos
+    const requiredFields = ['name', 'email', 'phone', 'date', 'time', 'service'];
+    const missingFields = requiredFields.filter(field => !data[field]);
+    
+    if (missingFields.length > 0) {
       return NextResponse.json(
-        { error: 'Todos los campos obligatorios deben ser completados.' },
+        { error: 'Campos requeridos faltantes: ' + missingFields.join(', ') },
         { status: 400 }
       );
     }
 
-    // Verificar si la fecha y hora ya están reservadas
+    // Verificar disponibilidad
     const existingAppointment = await prisma.appointment.findFirst({
       where: {
-        date: new Date(data.date),
-        time: data.time,
-        status: {
-          not: 'cancelled', // Solo permite citas canceladas en la misma fecha y hora
-        },
-      },
+        AND: [
+          { date: data.date },
+          { time: data.time },
+          { status: { not: 'cancelled' } }
+        ]
+      }
     });
 
     if (existingAppointment) {
       return NextResponse.json(
-        { error: 'Esta fecha y hora ya están reservadas. Por favor, selecciona otro horario.' },
-        { status: 400 }
+        { error: 'Horario no disponible' },
+        { status: 409 }
       );
     }
 
-    // Crear nueva cita
+    // Crear cita
     const appointment = await prisma.appointment.create({
       data: {
         name: data.name,
         email: data.email,
         phone: data.phone,
-        date: new Date(data.date),
+        date: data.date,
         time: data.time,
         service: data.service,
-        message: data.message || '', // Mensaje opcional
-        status: 'pending', // Estado inicial predeterminado
-      },
+        message: data.message ?? '',
+        status: 'pending'
+      }
     });
 
-    // Mensaje de confirmación para WhatsApp
-    const message = `Nueva cita:\nNombre: ${data.name}\nEmail: ${data.email}\nTeléfono: ${data.phone}\nFecha: ${new Date(data.date).toLocaleDateString()}\nHora: ${data.time}\nServicio: ${data.service}\nMensaje: ${data.message || 'N/A'}`;
-    const whatsappUrl = `https://wa.me/9862269662?text=${encodeURIComponent(message)}`;
+    // Mensaje WhatsApp
+    const message = `Nueva cita:
+Nombre: ${data.name}
+Email: ${data.email}
+Tel: ${data.phone}
+Fecha: ${new Date(data.date).toLocaleDateString()}
+Hora: ${data.time}
+Servicio: ${data.service}
+${data.message ? `Mensaje: ${data.message}` : ''}`;
 
     return NextResponse.json({
-      success: true,
       appointment,
-      whatsappUrl,
+      whatsappUrl: `https://wa.me/9862269662?text=${encodeURIComponent(message)}`
     });
-  } catch (error: unknown) {
-    console.error('Error al crear la cita:', error);
+
+  } catch (error) {
+    console.error('Error:', error);
     return NextResponse.json(
-      { error: 'Ocurrió un error al procesar tu solicitud. Inténtalo nuevamente más tarde.' },
+      { error: 'Error al procesar la solicitud' },
       { status: 500 }
     );
   }
@@ -68,16 +77,15 @@ export async function POST(req: Request) {
 export async function GET() {
   try {
     const appointments = await prisma.appointment.findMany({
-      orderBy: {
-        date: 'asc',
-      },
+      orderBy: { date: 'asc' },
+      where: { status: { not: 'cancelled' } }
     });
 
     return NextResponse.json(appointments);
-  } catch (error: unknown) {
-    console.error('Error al obtener las citas:', error);
+  } catch (error) {
+    console.error('Error:', error);
     return NextResponse.json(
-      { error: 'Ocurrió un error al obtener las citas. Inténtalo nuevamente más tarde.' },
+      { error: 'Error al obtener citas' },
       { status: 500 }
     );
   }
