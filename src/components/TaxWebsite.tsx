@@ -2,39 +2,12 @@
 
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { Calculator, Calendar, FileText } from 'lucide-react';
 import ChatWidget from './chat/ChatWidget';
 
 const TaxWebsite = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-blue-900 text-white p-4">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-              <div className="text-blue-900 font-bold text-xl">G</div>
-            </div>
-            <span className="text-2xl font-bold">GEMTAX</span>
-          </Link>
-          <div className="hidden md:flex space-x-6">
-            <Link href="/" className="hover:text-blue-200">
-              Inicio
-            </Link>
-            <Link href="/servicios" className="hover:text-blue-200">
-              Servicios
-            </Link>
-            <Link href="/precios" className="hover:text-blue-200">
-              Precios
-            </Link>
-            <Link href="/contacto" className="hover:text-blue-200">
-              Contacto
-            </Link>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <div className="bg-blue-800 text-white py-16">
         <div className="max-w-6xl mx-auto px-4">
@@ -124,37 +97,6 @@ const TaxWebsite = () => {
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-      <footer className="bg-blue-900 text-white py-8">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="font-bold text-lg mb-4">GEMTAX</h3>
-              <p className="text-blue-200">
-                Expertos en servicios de impuestos y asesoría fiscal
-              </p>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-4">Contacto</h3>
-              <p className="text-blue-200">
-                Email: info@gemtaxexpert.com<br />
-                Tel: (555) 123-4567
-              </p>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-4">Horario</h3>
-              <p className="text-blue-200">
-                Lunes - Viernes: 9:00 AM - 6:00 PM<br />
-                Sábado: 10:00 AM - 2:00 PM
-              </p>
-            </div>
-          </div>
-          <div className="border-t border-blue-800 mt-8 pt-8 text-center text-blue-200">
-            <p>&copy; {new Date().getFullYear()} GEMTAX. Todos los derechos reservados.</p>
-          </div>
-        </div>
-      </footer>
 
       {/* Chat Widget */}
       <ChatWidget />
