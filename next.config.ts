@@ -1,12 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
   eslint: {
-    ignoreDuringBuilds: true  // Esto deshabilitará las verificaciones de ESLint durante el build
+    ignoreDuringBuilds: true,
   },
-  images: {
-    domains: ['gemtaxexpert.com'],
-  },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
