@@ -21,6 +21,7 @@ const AppointmentPage = () => {
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [timeSlots, setTimeSlots] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -29,60 +30,83 @@ const AppointmentPage = () => {
     service: 'personal',
   });
 
-  // Generar horarios disponibles (9 AM - 6 PM)
-  const generateTimeSlots = () => {
+  const generateTimeSlots = (date: Date | null) => {
+    if (!date) return [];
+    
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+    const currentMinutes = currentDate.getMinutes();
+    const isToday = date.toDateString() === currentDate.toDateString();
+    
+    const day = date.getDay();
+    const isWeekend = day === 0 || day === 6;
     const slots: string[] = [];
-    for (let i = 9; i <= 18; i++) {
-      slots.push(`${i.toString().padStart(2, '0')}:00`);
-      if (i !== 18) slots.push(`${i.toString().padStart(2, '0')}:30`);
-    }
+    
+    const startHour = isWeekend ? 10 : 9;
+    const endHour = isWeekend ? 14 : 18;
+    
+    for (let hour = startHour; hour <= endHour; hour++) {
+      const minuteOptions = ['00', '30'];
+      for (const minute of minuteOptions) {
+        if (isToday && (hour < currentHour || (hour === currentHour && parseInt(minute) <= currentMinutes))) {
+          continue; 
+        }
+        slots.push(`${hour.toString().padStart(2, '0')}:${minute}`);
+      }
+     }
+    
     return slots;
   };
 
-  const timeSlots = generateTimeSlots();
-
-  // Fetch citas del servidor
   useEffect(() => {
-    fetchAppointments();
+    if (selectedDate) {
+      setTimeSlots(generateTimeSlots(selectedDate));
+      fetchAppointments();
+    }
   }, [selectedDate]);
 
   const fetchAppointments = async () => {
+    if (!selectedDate) return;
     try {
       const response = await fetch('/api/appointments');
-      if (!response.ok) {
-        throw new Error('Error al cargar las citas.');
-      }
+      if (!response.ok) throw new Error('Error al cargar citas');
       const data = await response.json();
       setAppointments(data);
     } catch (error) {
-      console.error('Error fetching appointments:', error);
+      console.error('Error:', error);
     }
   };
 
   const isTimeSlotAvailable = (time: string) => {
+    if (!selectedDate) return false;
+    
+    const now = new Date();
+    const slotDate = new Date(selectedDate);
+    const [hours, minutes] = time.split(':').map(Number);
+    slotDate.setHours(hours, minutes, 0);
+    
+    if (slotDate < now) return false;
+
     return !appointments.some(
-      (apt) =>
-        apt.date === selectedDate?.toISOString().split('T')[0] &&
+      apt => 
+        apt.date === selectedDate.toISOString().split('T')[0] &&
         apt.time === time &&
-        apt.status !== 'cancelled',
+        apt.status !== 'cancelled'
     );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedDate || !selectedTime) {
-      alert('Por favor selecciona una fecha y hora');
+      alert('Selecciona fecha y hora');
       return;
     }
 
     setIsLoading(true);
-
     try {
       const response = await fetch('/api/appointments', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
           date: selectedDate.toISOString().split('T')[0],
@@ -91,10 +115,13 @@ const AppointmentPage = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Error al agendar la cita.');
+        const error = await response.json();
+        throw new Error(error.error || 'Error al agendar');
       }
 
-      alert('¡Cita agendada exitosamente! Te contactaremos pronto para confirmar.');
+      const result = await response.json();
+      window.location.href = result.whatsappUrl;
+      
       setFormData({
         name: '',
         email: '',
@@ -104,22 +131,11 @@ const AppointmentPage = () => {
       });
       setSelectedDate(null);
       setSelectedTime('');
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        alert(error.message);
-      } else {
-        alert('Ocurrió un error inesperado. Por favor, inténtalo de nuevo.');
-      }
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Error inesperado');
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
   };
 
   return (
@@ -127,7 +143,6 @@ const AppointmentPage = () => {
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold text-center mb-8">Agendar Cita</h1>
         <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-8 space-y-6">
-          {/* Información Personal */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Información Personal</h2>
             <input
@@ -135,7 +150,7 @@ const AppointmentPage = () => {
               name="name"
               placeholder="Nombre Completo"
               value={formData.name}
-              onChange={handleChange}
+              onChange={e => setFormData({...formData, [e.target.name]: e.target.value})}
               required
               className="w-full border rounded-lg p-2"
             />
@@ -144,7 +159,7 @@ const AppointmentPage = () => {
               name="email"
               placeholder="Email"
               value={formData.email}
-              onChange={handleChange}
+              onChange={e => setFormData({...formData, [e.target.name]: e.target.value})}
               required
               className="w-full border rounded-lg p-2"
             />
@@ -153,37 +168,26 @@ const AppointmentPage = () => {
               name="phone"
               placeholder="Teléfono"
               value={formData.phone}
-              onChange={handleChange}
+              onChange={e => setFormData({...formData, [e.target.name]: e.target.value})}
               required
               className="w-full border rounded-lg p-2"
             />
           </div>
 
-          {/* Selección de Fecha */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Selecciona una Fecha</h2>
             <Calendar
-              onChange={(value) => {
-                if (value && !Array.isArray(value)) {
-                  setSelectedDate(value); // Si es una fecha individual, asignarla
-                } else if (Array.isArray(value) && value.length > 0) {
-                  setSelectedDate(value[0]); // Si es un rango, toma la primera fecha
-                } else {
-                  setSelectedDate(null); // Si es null, asigna null
-                }
-              }}
+              onChange={value => setSelectedDate(Array.isArray(value) ? value[0] : value)}
               value={selectedDate}
               minDate={new Date()}
               className="border rounded-lg"
             />
-
           </div>
 
-          {/* Selección de Hora */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Selecciona una Hora</h2>
             <div className="grid grid-cols-4 gap-2">
-              {timeSlots.map((time) => (
+              {timeSlots.map(time => (
                 <button
                   key={time}
                   type="button"
@@ -203,20 +207,17 @@ const AppointmentPage = () => {
             </div>
           </div>
 
-          {/* Tipo de Servicio */}
-          <div>
-            <select
-              name="service"
-              value={formData.service}
-              onChange={handleChange}
-              required
-              className="w-full border rounded-lg p-2"
-            >
-              <option value="personal">Impuestos Personales</option>
-              <option value="business">Impuestos Empresariales</option>
-              <option value="consulting">Consultoría Fiscal</option>
-            </select>
-          </div>
+          <select
+            name="service"
+            value={formData.service}
+            onChange={e => setFormData({...formData, service: e.target.value})}
+            required
+            className="w-full border rounded-lg p-2"
+          >
+            <option value="personal">Impuestos Personales</option>
+            <option value="business">Impuestos Empresariales</option>
+            <option value="consulting">Consultoría Fiscal</option>
+          </select>
 
           <button
             type="submit"
