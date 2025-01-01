@@ -1,171 +1,231 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Calendar, Clock, User,  MessageSquare } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
-interface TimeSlot {
-  hour: string;
-  available: boolean;
+interface Appointment {
+  id: string;
+  date: string;
+  time: string;
+  name: string;
+  email: string;
+  phone: string;
+  service: string;
+  message: string;
+  status: string;
 }
 
 const AppointmentPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string>('');
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
+    message: '',
     service: 'personal',
-    message: ''
   });
 
   // Generar horarios disponibles (9 AM - 6 PM)
-  const timeSlots: TimeSlot[] = Array.from({ length: 18 }, (_, i) => {
-    const hour = Math.floor(i / 2) + 9;
-    const minute = i % 2 === 0 ? '00' : '30';
-    const timeString = `${hour.toString().padStart(2, '0')}:${minute}`;
-    return {
-      hour: timeString,
-      available: true
-    };
-  });
+  const generateTimeSlots = () => {
+    const slots: string[] = [];
+    for (let i = 9; i <= 18; i++) {
+      slots.push(`${i.toString().padStart(2, '0')}:00`);
+      if (i !== 18) slots.push(`${i.toString().padStart(2, '0')}:30`);
+    }
+    return slots;
+  };
+
+  const timeSlots = generateTimeSlots();
+
+  // Fetch citas del servidor
+  useEffect(() => {
+    fetchAppointments();
+  }, [selectedDate]);
+
+  const fetchAppointments = async () => {
+    try {
+      const response = await fetch('/api/appointments');
+      if (!response.ok) {
+        throw new Error('Error al cargar las citas.');
+      }
+      const data = await response.json();
+      setAppointments(data);
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+    }
+  };
+
+  const isTimeSlotAvailable = (time: string) => {
+    return !appointments.some(
+      (apt) =>
+        apt.date === selectedDate?.toISOString().split('T')[0] &&
+        apt.time === time &&
+        apt.status !== 'cancelled',
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedDate || !selectedTime) return;
+    if (!selectedDate || !selectedTime) {
+      alert('Por favor selecciona una fecha y hora');
+      return;
+    }
 
-    const message = `Nueva cita:\nNombre: ${formData.name}\nEmail: ${formData.email}\nTeléfono: ${formData.phone}\nFecha: ${selectedDate.toLocaleDateString()}\nHora: ${selectedTime}\nServicio: ${formData.service}\nMensaje: ${formData.message}`;
-    window.open(`https://wa.me/9862269662?text=${encodeURIComponent(message)}`, '_blank');
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/appointments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          date: selectedDate.toISOString().split('T')[0],
+          time: selectedTime,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al agendar la cita.');
+      }
+
+      alert('¡Cita agendada exitosamente! Te contactaremos pronto para confirmar.');
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
+        service: 'personal',
+      });
+      setSelectedDate(null);
+      setSelectedTime('');
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert('Ocurrió un error inesperado. Por favor, inténtalo de nuevo.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-blue-800 text-white py-16">
-        <div className="max-w-6xl mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-4 text-center">Agenda tu Cita</h1>
-          <p className="text-xl text-center">
-            Selecciona el día y hora que mejor te convenga
-          </p>
-        </div>
-      </div>
-
-      <div className="max-w-4xl mx-auto px-4 py-16">
-        <form onSubmit={handleSubmit} className="space-y-8">
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-3xl font-bold text-center mb-8">Agendar Cita</h1>
+        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-8 space-y-6">
           {/* Información Personal */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-              <User className="w-6 h-6" />
-              Información Personal
-            </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-gray-700 mb-2">Nombre Completo</label>
-                <input
-                  type="text"
-                  required
-                  className="w-full p-3 border rounded-lg"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 mb-2">Email</label>
-                <input
-                  type="email"
-                  required
-                  className="w-full p-3 border rounded-lg"
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 mb-2">Teléfono</label>
-                <input
-                  type="tel"
-                  required
-                  className="w-full p-3 border rounded-lg"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 mb-2">Tipo de Servicio</label>
-                <select
-                  className="w-full p-3 border rounded-lg"
-                  value={formData.service}
-                  onChange={(e) => setFormData({...formData, service: e.target.value})}
-                >
-                  <option value="personal">Impuestos Personales</option>
-                  <option value="business">Impuestos Empresariales</option>
-                  <option value="consulting">Consultoría Fiscal</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Selección de Fecha */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-              <Calendar className="w-6 h-6" />
-              Selecciona la Fecha
-            </h2>
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Información Personal</h2>
             <input
-              type="date"
-              className="w-full p-3 border rounded-lg"
-              onChange={(e) => setSelectedDate(new Date(e.target.value))}
-              min={new Date().toISOString().split('T')[0]}
+              type="text"
+              name="name"
+              placeholder="Nombre Completo"
+              value={formData.name}
+              onChange={handleChange}
               required
+              className="w-full border rounded-lg p-2"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full border rounded-lg p-2"
+            />
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Teléfono"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+              className="w-full border rounded-lg p-2"
             />
           </div>
 
+          {/* Selección de Fecha */}
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Selecciona una Fecha</h2>
+            <Calendar
+              onChange={(value) => {
+                if (value && !Array.isArray(value)) {
+                  setSelectedDate(value); // Si es una fecha individual, asignarla
+                } else if (Array.isArray(value) && value.length > 0) {
+                  setSelectedDate(value[0]); // Si es un rango, toma la primera fecha
+                } else {
+                  setSelectedDate(null); // Si es null, asigna null
+                }
+              }}
+              value={selectedDate}
+              minDate={new Date()}
+              className="border rounded-lg"
+            />
+
+          </div>
+
           {/* Selección de Hora */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-              <Clock className="w-6 h-6" />
-              Selecciona la Hora
-            </h2>
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-              {timeSlots.map((slot) => (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Selecciona una Hora</h2>
+            <div className="grid grid-cols-4 gap-2">
+              {timeSlots.map((time) => (
                 <button
-                  key={slot.hour}
+                  key={time}
                   type="button"
-                  className={`p-2 rounded-lg text-center transition-colors ${
-                    selectedTime === slot.hour
-                      ? 'bg-blue-600 text-white'
-                      : slot.available
+                  onClick={() => setSelectedTime(time)}
+                  disabled={!isTimeSlotAvailable(time)}
+                  className={`p-2 rounded-lg ${
+                    selectedTime === time
+                      ? 'bg-blue-500 text-white'
+                      : isTimeSlotAvailable(time)
                       ? 'bg-gray-100 hover:bg-gray-200'
-                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                      : 'bg-gray-300 cursor-not-allowed text-gray-500'
                   }`}
-                  onClick={() => slot.available && setSelectedTime(slot.hour)}
-                  disabled={!slot.available}
                 >
-                  {slot.hour}
+                  {time}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Mensaje Adicional */}
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-              <MessageSquare className="w-6 h-6" />
-              Mensaje Adicional
-            </h2>
-            <textarea
-              className="w-full p-3 border rounded-lg"
-              rows={4}
-              placeholder="Describe brevemente tu situación o cualquier información adicional que debamos saber..."
-              value={formData.message}
-              onChange={(e) => setFormData({...formData, message: e.target.value})}
-            ></textarea>
+          {/* Tipo de Servicio */}
+          <div>
+            <select
+              name="service"
+              value={formData.service}
+              onChange={handleChange}
+              required
+              className="w-full border rounded-lg p-2"
+            >
+              <option value="personal">Impuestos Personales</option>
+              <option value="business">Impuestos Empresariales</option>
+              <option value="consulting">Consultoría Fiscal</option>
+            </select>
           </div>
 
-          {/* Botón de Envío */}
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            disabled={isLoading || !selectedDate || !selectedTime}
+            className={`w-full py-3 rounded-lg text-white font-semibold ${
+              isLoading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
+            }`}
           >
-            Confirmar Cita
+            {isLoading ? 'Agendando...' : 'Agendar Cita'}
           </button>
         </form>
       </div>

@@ -21,7 +21,7 @@ const TaxWebsite = () => {
               </p>
               <button 
                 className="bg-green-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors duration-200"
-                onClick={() => window.location.href = '/contacto'}
+                onClick={() => window.location.href = '/agendar'}
               >
                 Agenda tu Consulta
               </button>
