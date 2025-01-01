@@ -3,12 +3,6 @@
 import React from 'react';
 
 const ContactPage = () => {
-  const phoneNumber = "9862269662";
-
-  //const handleWhatsAppClick = () => {
-  //  window.open(`https://wa.me/${phoneNumber}`, '_blank');
-  //};
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -27,7 +21,10 @@ const ContactPage = () => {
           {/* Form */}
           <div>
             <h2 className="text-2xl font-bold mb-6">Envíanos un mensaje</h2>
-            <form onSubmit={(e) => { e.preventDefault(); handleWhatsAppClick(); }} className="space-y-6">
+            <form
+              onSubmit={(e) => e.preventDefault()} // Removido handleWhatsAppClick ya que no se usa
+              className="space-y-6"
+            >
               <div>
                 <label htmlFor="name" className="block text-gray-700 mb-2">Nombre Completo</label>
                 <input
@@ -78,13 +75,6 @@ const ContactPage = () => {
                 <p className="text-gray-600">Lunes - Viernes: 9:00 AM - 6:00 PM</p>
                 <p className="text-gray-600">Sábado: 10:00 AM - 2:00 PM</p>
               </div>
-
-              <button
-                onClick={handleWhatsAppClick}
-                className="w-full bg-green-500 text-white py-4 rounded-lg font-semibold hover:bg-green-600 transition-colors flex items-center justify-center space-x-2"
-              >
-                <span>Contactar por WhatsApp</span>
-              </button>
             </div>
           </div>
         </div>

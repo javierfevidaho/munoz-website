@@ -1,7 +1,5 @@
 'use client';
 
-import React from 'react';
-
 const ServicesPage = () => {
   const mainServices = [
     {
@@ -89,22 +87,6 @@ const ServicesPage = () => {
               </div>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="bg-gray-100 py-16">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-3xl font-bold mb-4">¿Necesitas un servicio personalizado?</h2>
-          <p className="text-xl text-gray-600 mb-8">
-            Contáctanos para discutir tus necesidades específicas y obtener una cotización a medida
-          </p>
-          <button
-            onClick={handleContactClick}
-            className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-          >
-            Contactar Ahora
-          </button>
         </div>
       </div>
     </div>
