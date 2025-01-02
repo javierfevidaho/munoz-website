@@ -1,25 +1,27 @@
+/* globals.css */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #ffffff; /* Fondo blanco para modo claro */
+  --foreground: #171717; /* Texto negro para modo claro */
   --primary-color: #0ea5e9; /* Primary blue color */
   --secondary-color: #10b981; /* Secondary green color */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0a0a0a; /* Fondo oscuro para modo oscuro */
+    --foreground: #ededed; /* Texto blanco para modo oscuro */
   }
 }
 
 /* Global body styles */
 body {
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--foreground); /* El color del texto cambia según el fondo */
+  background: var(--background); /* Fondo claro o oscuro según el esquema */
   font-family: 'Inter', sans-serif, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
@@ -50,7 +52,7 @@ a:focus {
 /* Buttons */
 button {
   background-color: var(--primary-color);
-  color: var(--background);
+  color: var(--background); /* Texto blanco sobre fondo de botones */
   font-family: inherit;
   border: none;
   padding: 0.5rem 1rem;

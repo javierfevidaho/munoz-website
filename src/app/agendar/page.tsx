@@ -138,6 +138,20 @@ const AppointmentPage = () => {
     }
   };
 
+  // Lógica para cambiar el color de los días de la semana
+  const tileClassName = ({ date, view }: { date: Date; view: string }) => {
+    // Solo modificar las celdas en el mes (view === 'month')
+    if (view === 'month') {
+      const day = date.getDay();
+      if (day === 0 || day === 6) { // Domingo (0) y Sábado (6)
+        return 'text-red-500'; // Red color for weekends
+      } else {
+        return 'text-black'; // Black color for weekdays
+      }
+    }
+    return '';
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
@@ -181,30 +195,32 @@ const AppointmentPage = () => {
               value={selectedDate}
               minDate={new Date()}
               className="border rounded-lg"
+              tileClassName={tileClassName} 
             />
           </div>
 
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Selecciona una Hora</h2>
             <div className="grid grid-cols-4 gap-2">
-              {timeSlots.map(time => (
-                <button
-                  key={time}
-                  type="button"
-                  onClick={() => setSelectedTime(time)}
-                  disabled={!isTimeSlotAvailable(time)}
-                  className={`p-2 rounded-lg ${
-                    selectedTime === time
-                      ? 'bg-blue-500 text-white'
-                      : isTimeSlotAvailable(time)
-                      ? 'bg-gray-100 hover:bg-gray-200'
-                      : 'bg-gray-300 cursor-not-allowed text-gray-500'
-                  }`}
-                >
-                  {time}
-                </button>
-              ))}
-            </div>
+            {timeSlots.map(time => (
+              <button
+                key={time}
+                type="button"
+                onClick={() => setSelectedTime(time)}
+                disabled={!isTimeSlotAvailable(time)}
+                className={`p-2 rounded-lg ${
+                  selectedTime === time
+                    ? 'bg-blue-500 text-white' // Seleccionado
+                    : isTimeSlotAvailable(time)
+                    ? 'bg-gray-100 hover:bg-gray-200 text-black' // Disponible, texto negro
+                    : 'bg-gray-300 cursor-not-allowed text-gray-500' // No disponible
+                }`}
+              >
+                {time}
+              </button>
+            ))}
+          </div>
+
           </div>
 
           <select

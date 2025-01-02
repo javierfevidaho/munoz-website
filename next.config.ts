@@ -1,8 +1,5 @@
-/** @type {import('next').NextConfig} */
+// next.config.ts
+
 module.exports = {
-  reactStrictMode: true,
-  output: 'standalone', // Asegúrate de tener esta opción
-  experimental: {
-    appDir: true,
-  },
+  reactStrictMode: true, // Otras configuraciones que necesites
 };

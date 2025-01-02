@@ -23,16 +23,16 @@ const Navigation = () => {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6">
-          <Link href="/" className="hover:text-primary-200">
+          <Link href="/" className="text-white hover:text-primary-200">
             Inicio
           </Link>
-          <Link href="/servicios" className="hover:text-primary-200">
+          <Link href="/servicios" className="text-white hover:text-primary-200">
             Servicios
           </Link>
-          <Link href="/precios" className="hover:text-primary-200">
+          <Link href="/precios" className="text-white hover:text-primary-200">
             Precios
           </Link>
-          <Link href="/contacto" className="hover:text-primary-200">
+          <Link href="/contacto" className="text-white hover:text-primary-200">
             Contacto
           </Link>
         </div>
@@ -69,16 +69,16 @@ const Navigation = () => {
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-primary-700 text-white transition-all duration-300">
-          <Link href="/" className="block px-4 py-2 hover:bg-primary-500">
+          <Link href="/" className="block px-4 py-2 text-white hover:bg-primary-500">
             Inicio
           </Link>
-          <Link href="/servicios" className="block px-4 py-2 hover:bg-primary-500">
+          <Link href="/servicios" className="block px-4 py-2 text-white hover:bg-primary-500">
             Servicios
           </Link>
-          <Link href="/precios" className="block px-4 py-2 hover:bg-primary-500">
+          <Link href="/precios" className="block px-4 py-2 text-white hover:bg-primary-500">
             Precios
           </Link>
-          <Link href="/contacto" className="block px-4 py-2 hover:bg-primary-500">
+          <Link href="/contacto" className="block px-4 py-2 text-white hover:bg-primary-500">
             Contacto
           </Link>
         </div>

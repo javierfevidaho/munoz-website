@@ -1,6 +1,8 @@
+// src/app/admin/appointments/page.tsx
+
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Appointment {
   id: string;
@@ -17,10 +19,6 @@ const AdminAppointments = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchAppointments();
-  }, []);
 
   const fetchAppointments = async () => {
     setLoading(true);
@@ -40,6 +38,10 @@ const AdminAppointments = () => {
     }
   };
 
+  useEffect(() => {
+    fetchAppointments();
+  }, []);
+
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
       const response = await fetch(`/api/appointments/${id}`, {
@@ -54,7 +56,8 @@ const AdminAppointments = () => {
         throw new Error('Error al actualizar la cita.');
       }
 
-      // Actualizar el estado local sin necesidad de volver a hacer fetch.
+      // Eliminar la variable `updatedAppointment` si no la necesitas
+      await response.json(); // Solo realizamos la operación sin asignar el resultado
       setAppointments((prev) =>
         prev.map((appointment) =>
           appointment.id === id ? { ...appointment, status: newStatus } : appointment
@@ -67,52 +70,26 @@ const AdminAppointments = () => {
   };
 
   if (loading) {
-    return <div className="p-8">Cargando citas...</div>;
+    return <div>Cargando citas...</div>;
   }
 
   if (error) {
-    return <div className="p-8 text-red-500">{error}</div>;
+    return <div>{error}</div>;
   }
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-6">Administrar Citas</h1>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white shadow-md rounded-lg">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="px-4 py-2">Fecha</th>
-              <th className="px-4 py-2">Hora</th>
-              <th className="px-4 py-2">Nombre</th>
-              <th className="px-4 py-2">Servicio</th>
-              <th className="px-4 py-2">Estado</th>
-              <th className="px-4 py-2">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {appointments.map((appointment) => (
-              <tr key={appointment.id} className="border-t">
-                <td className="px-4 py-2">{new Date(appointment.date).toLocaleDateString()}</td>
-                <td className="px-4 py-2">{appointment.time}</td>
-                <td className="px-4 py-2">{appointment.name}</td>
-                <td className="px-4 py-2">{appointment.service}</td>
-                <td className="px-4 py-2">{appointment.status}</td>
-                <td className="px-4 py-2">
-                  <select
-                    value={appointment.status}
-                    onChange={(e) => handleStatusChange(appointment.id, e.target.value)}
-                    className="border rounded px-2 py-1"
-                  >
-                    <option value="pending">Pendiente</option>
-                    <option value="confirmed">Confirmada</option>
-                    <option value="cancelled">Cancelada</option>
-                  </select>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div>
+      <h1>Administrar Citas</h1>
+      <ul>
+        {appointments.map((appointment) => (
+          <li key={appointment.id}>
+            {appointment.time} - {appointment.name} - {appointment.status}
+            <button onClick={() => handleStatusChange(appointment.id, 'confirmed')} disabled={appointment.status === 'confirmed'}>
+              {appointment.status === 'confirmed' ? 'Confirmada' : 'Confirmar'}
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
