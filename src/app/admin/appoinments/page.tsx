@@ -15,18 +15,28 @@ interface Appointment {
 
 const AdminAppointments = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchAppointments();
   }, []);
 
   const fetchAppointments = async () => {
+    setLoading(true);
+    setError(null);
     try {
       const response = await fetch('/api/appointments');
+      if (!response.ok) {
+        throw new Error('Error al cargar las citas.');
+      }
       const data = await response.json();
       setAppointments(data);
     } catch (error) {
       console.error('Error fetching appointments:', error);
+      setError('No se pudieron cargar las citas. Inténtalo de nuevo más tarde.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -40,13 +50,29 @@ const AdminAppointments = () => {
         body: JSON.stringify({ status: newStatus }),
       });
 
-      if (response.ok) {
-        fetchAppointments();
+      if (!response.ok) {
+        throw new Error('Error al actualizar la cita.');
       }
+
+      // Actualizar el estado local sin necesidad de volver a hacer fetch.
+      setAppointments((prev) =>
+        prev.map((appointment) =>
+          appointment.id === id ? { ...appointment, status: newStatus } : appointment
+        )
+      );
     } catch (error) {
       console.error('Error updating appointment:', error);
+      alert('Error al actualizar el estado de la cita.');
     }
   };
+
+  if (loading) {
+    return <div className="p-8">Cargando citas...</div>;
+  }
+
+  if (error) {
+    return <div className="p-8 text-red-500">{error}</div>;
+  }
 
   return (
     <div className="p-8">
