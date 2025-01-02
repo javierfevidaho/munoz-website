@@ -1,10 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   reactStrictMode: true,
-  eslint: {
-    ignoreDuringBuilds: true, // Ignora ESLint durante el build
+  output: 'standalone', // Asegúrate de tener esta opción
+  experimental: {
+    appDir: true,
   },
-  output: 'standalone', // Hace que la aplicación sea más compatible con entornos de despliegue
 };
-
-module.exports = nextConfig;
