@@ -20,15 +20,15 @@ module.exports = {
           800: '#075985',
           900: '#0c4a6e',
         },
-        secondary: {
-          // Colores personalizados para tu marca
-          DEFAULT: '#10B981',
-        }
+        text: {
+          light: '#f8fafc',
+          dark: '#1f2937',
+        },
       },
       fontFamily: {
-        sans: ['var(--font-inter)'],
-      }
+        sans: ['var(--font-inter)', 'sans-serif'],
+      },
     },
   },
   plugins: [],
-}
+};
