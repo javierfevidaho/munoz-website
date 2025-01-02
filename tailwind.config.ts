@@ -26,9 +26,13 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'], // Asegúrate de que Inter esté instalado
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'), // Para mejorar formularios
+    require('@tailwindcss/typography'), // Para tipografía avanzada
+    require('@tailwindcss/aspect-ratio'), // Para manejar proporciones
+  ],
 };

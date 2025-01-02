@@ -27,16 +27,18 @@ const TaxWebsite = () => {
               </button>
             </div>
             <div className="flex justify-center">
-              <div className="relative w-[400px] h-[300px]">
-                <Image 
-                  src="/images/tax-services.jpg" 
-                  alt="Servicios de Impuestos" 
-                  fill
-                  className="object-cover rounded-lg shadow-lg"
-                  priority
-                  sizes="(max-width: 768px) 100vw, 400px"
-                />
-              </div>
+            <div className="relative w-full h-[300px] md:h-[500px]">
+              <Image
+                src="/images/tax-services.jpg"
+                alt="Servicios de Impuestos"
+                fill
+                className="object-cover rounded-lg shadow-lg"
+                priority
+                sizes="(max-width: 768px) 100vw, 400px"
+                onError={() => console.error('Image failed to load')}
+              />
+            </div>
+
             </div>
           </div>
         </div>
