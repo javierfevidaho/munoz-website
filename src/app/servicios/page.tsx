@@ -3,39 +3,39 @@
 const ServicesPage = () => {
   const mainServices = [
     {
-      title: "Declaración de Impuestos Personales",
-      description: "Maximiza tu devolución con nuestro servicio experto de declaración de impuestos personales. Manejamos todo tipo de declaraciones individuales y familiares.",
-      price: "Desde $150",
-      features: [
-        "Declaraciones federales y estatales",
-        "W-2 y 1099s",
-        "Deducciones detalladas",
-        "Créditos fiscales",
-        "Revisión de años anteriores"
-      ]
-    },
-    {
-      title: "Impuestos Empresariales",
-      description: "Servicios completos de impuestos para negocios de todos los tamaños. Optimizamos tu situación fiscal empresarial.",
-      price: "Desde $299",
-      features: [
-        "Declaraciones corporativas",
-        "Schedule C para autónomos",
-        "Nómina y pagos trimestrales",
-        "Planificación fiscal",
-        "Asesoría continua"
-      ]
-    },
-    {
-      title: "Consultoría Fiscal",
-      description: "Asesoramiento estratégico personalizado para optimizar tu situación fiscal y maximizar beneficios a largo plazo.",
+      title: "Instalación de Aires Acondicionados",
+      description: "Servicio profesional de instalación de aires acondicionados para hogares y negocios. Garantizamos confort y eficiencia.",
       price: "Desde $499",
       features: [
-        "Análisis fiscal completo",
-        "Estrategias de ahorro",
-        "Planificación patrimonial",
-        "Consultas ilimitadas",
-        "Representación ante el IRS"
+        "Instalación residencial y comercial",
+        "Sistemas centralizados y split",
+        "Configuración personalizada",
+        "Garantía de instalación",
+        "Asesoramiento en equipos"
+      ]
+    },
+    {
+      title: "Mantenimiento y Reparación",
+      description: "Mantenemos tus equipos funcionando de manera óptima con mantenimiento preventivo y reparaciones rápidas.",
+      price: "Desde $99",
+      features: [
+        "Limpieza de filtros y ductos",
+        "Revisión de refrigerante",
+        "Reparación de fallas comunes",
+        "Diagnóstico de sistemas",
+        "Servicio a domicilio"
+      ]
+    },
+    {
+      title: "Servicios de Insulación",
+      description: "Ahorra energía y mejora la eficiencia de tu hogar o negocio con nuestros servicios de insulación profesional.",
+      price: "Desde $199",
+      features: [
+        "Instalación de materiales aislantes",
+        "Optimización de consumo energético",
+        "Mejora del confort térmico",
+        "Asesoría personalizada",
+        "Trabajos garantizados"
       ]
     }
   ];
@@ -47,11 +47,11 @@ const ServicesPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-blue-800 text-white py-16">
+      <div className="bg-blue-700 text-white py-16">
         <div className="max-w-6xl mx-auto px-4">
           <h1 className="text-4xl font-bold mb-4 text-center">Nuestros Servicios</h1>
           <p className="text-xl text-center max-w-2xl mx-auto">
-            Soluciones fiscales integrales para individuos y empresas
+            Soluciones en climatización e insulación para hogares y negocios
           </p>
         </div>
       </div>
@@ -80,7 +80,7 @@ const ServicesPage = () => {
                 </ul>
                 <button 
                   onClick={handleContactClick}
-                  className="block w-full text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  className="block w-full text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-800 transition-colors"
                 >
                   Solicitar Servicio
                 </button>

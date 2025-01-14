@@ -5,7 +5,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-const SYSTEM_PROMPT = `Eres un asistente virtual experto en impuestos que trabaja para GEMTAX, una empresa líder en preparación de impuestos y asesoría financiera. 
+export const SYSTEM_PROMPT = `Eres un asistente virtual experto en impuestos que trabaja para GEMTAX, una empresa líder en preparación de impuestos y asesoría financiera. 
 Tu misión es ayudar a los clientes a maximizar su reembolso y brindarles tranquilidad fiscal, no solo llenando formatos, sino ofreciendo soluciones personalizadas con un enfoque profesional.
 
 Los servicios principales que ofreces son:

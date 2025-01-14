@@ -1,33 +1,45 @@
 {
   "compilerOptions": {
-    "target": "ESNext", // Usa ESNext para admitir las últimas características de JavaScript.
-    "lib": ["dom", "dom.iterable", "esnext"], // Soporte para navegadores modernos.
+    "target": "ESNext", // Admite las últimas características de JavaScript.
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ], // Soporte para navegadores modernos y las API más recientes.
     "allowJs": true, // Permite archivos .js junto con .ts.
-    "skipLibCheck": true, // Omite la verificación de tipos en los archivos de la biblioteca.
-    "strict": true, // Habilita estrictas verificaciones de tipo.
-    "forceConsistentCasingInFileNames": true, // Fuerza el uso consistente de mayúsculas y minúsculas en nombres de archivos.
-    "noEmit": true, // No genera archivos .js al compilar.
-    "esModuleInterop": true, // Permite la interoperabilidad con módulos ES.
-    "module": "ESNext", // Usa ESNext para soportar módulos modernos.
+    "skipLibCheck": true, // Omite la verificación de tipos en bibliotecas para mejorar la velocidad de compilación.
+    "strict": true, // Habilita estrictas verificaciones de tipo (muy recomendado).
+    "forceConsistentCasingInFileNames": true, // Previene errores por diferencias en mayúsculas y minúsculas en nombres de archivo.
+    "noEmit": true, // No genera archivos .js, ya que Next.js maneja el build.
+    "esModuleInterop": true, // Mejora la interoperabilidad con módulos CommonJS y ESModule.
+    "module": "ESNext", // Usa módulos modernos.
     "moduleResolution": "node", // Resolución de módulos compatible con Node.js.
     "resolveJsonModule": true, // Permite importar archivos JSON.
     "isolatedModules": true, // Necesario para el uso de TypeScript con Next.js.
-    "jsx": "preserve", // Mantiene el JSX para que Next.js lo procese.
-    "incremental": true, // Mejora la velocidad de compilación.
+    "jsx": "preserve", // Mantiene el JSX para que lo procese Next.js.
+    "incremental": true, // Habilita compilaciones incrementales para mejorar el rendimiento.
+    "baseUrl": ".", // Establece la raíz del proyecto.
     "paths": {
-      "@/*": ["./src/*"] // Alias para las rutas de tu proyecto.
+      "@/*": [
+        "./src/*"
+      ] // Alias para rutas absolutas.
     },
     "plugins": [
       {
-        "name": "next" // Habilita las herramientas de Next.js para TypeScript.
+        "name": "next"
       }
     ]
   },
   "include": [
-    "next-env.d.ts", // Archivos generados automáticamente por Next.js.
-    "**/*.ts", // Todos los archivos .ts.
-    "**/*.tsx", // Todos los archivos .tsx.
-    ".next/types/**/*.ts" // Tipos generados por Next.js.
+    "next-env.d.ts", // Tipos generados automáticamente por Next.js.
+    "**/*.ts", // Incluye todos los archivos .ts.
+    "**/*.tsx", // Incluye todos los archivos .tsx.
+    ".next/types/**/*.ts" // Incluye tipos generados por Next.js.
   ],
-  "exclude": ["node_modules"] // Excluye los módulos de Node.js.
+  "exclude": [
+    "node_modules", // Excluye los módulos de Node.js.
+    "**/*.test.ts", // Opcional: excluye archivos de prueba.
+    "**/*.spec.ts", // Opcional: excluye archivos de pruebas unitarias.
+    "**/__tests__/**" // Opcional: excluye carpetas específicas para pruebas.
+  ]
 }

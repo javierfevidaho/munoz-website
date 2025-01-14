@@ -5,23 +5,27 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff; /* Fondo blanco para modo claro */
-  --foreground: #171717; /* Texto negro para modo claro */
-  --primary-color: #0ea5e9; /* Primary blue color */
-  --secondary-color: #10b981; /* Secondary green color */
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary-color: #1e3a8a; /* Azul marino del logo Muñoz A/C */
+  --secondary-color: #0369a1; /* Azul más claro para acentos */
+  --accent-color: #0ea5e9; /* Azul brillante para elementos interactivos */
+  --success-color: #059669; /* Verde para CTAs y elementos de éxito */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a; /* Fondo oscuro para modo oscuro */
-    --foreground: #ededed; /* Texto blanco para modo oscuro */
+    --background: #0f172a; /* Fondo azul muy oscuro para modo nocturno */
+    --foreground: #f8fafc;
+    --primary-color: #2563eb; /* Azul más brillante para modo oscuro */
+    --secondary-color: #38bdf8; /* Azul más claro para contraste en modo oscuro */
   }
 }
 
 /* Global body styles */
 body {
-  color: var(--foreground); /* El color del texto cambia según el fondo */
-  background: var(--background); /* Fondo claro o oscuro según el esquema */
+  color: var(--foreground);
+  background: var(--background);
   font-family: 'Inter', sans-serif, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
@@ -41,46 +45,61 @@ h1, h2, h3, h4, h5, h6 {
 a {
   color: var(--primary-color);
   text-decoration: none;
+  transition: color 0.2s ease-in-out;
 }
 
 a:hover,
 a:focus {
-  color: var(--secondary-color);
+  color: var(--accent-color);
   text-decoration: underline;
 }
 
 /* Buttons */
 button {
   background-color: var(--primary-color);
-  color: var(--background); /* Texto blanco sobre fondo de botones */
+  color: white;
   font-family: inherit;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 0.375rem;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 button:hover,
 button:focus {
-  background-color: var(--secondary-color);
+  background-color: var(--accent-color);
+  transform: translateY(-1px);
+}
+
+/* Call to action button */
+.btn-cta {
+  background-color: var(--success-color);
+}
+
+.btn-cta:hover,
+.btn-cta:focus {
+  background-color: var(--accent-color);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 /* Forms */
 input, textarea, select {
   border: 1px solid var(--primary-color);
-  padding: 0.5rem;
+  padding: 0.75rem;
   border-radius: 0.375rem;
   font-family: inherit;
   background-color: var(--background);
   color: var(--foreground);
+  transition: border-color 0.2s ease-in-out;
 }
 
 input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  border-color: var(--secondary-color);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
 }
 
 /* Utility classes */
@@ -105,4 +124,24 @@ select:focus {
 
 .bg-secondary {
   background-color: var(--secondary-color);
+}
+
+/* Hover effects for cards */
+.card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom gradients */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+/* Custom shadows */
+.shadow-custom {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }

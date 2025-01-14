@@ -7,41 +7,41 @@ const PricingPage = () => {
   const pricingPlans = [
     {
       name: "Plan Básico",
-      price: "$150",
-      description: "Para declaraciones simples",
+      price: "$99",
+      description: "Ideal para mantenimientos simples",
       features: [
-        "Declaración de impuestos personal",
-        "W-2 y 1099 simple",
-        "Deducción estándar",
-        "Consulta básica incluida",
+        "Revisión general del sistema",
+        "Limpieza de filtros",
+        "Chequeo de refrigerante",
+        "Diagnóstico básico",
         "Soporte por email"
       ]
     },
     {
-      name: "Plan Profesional",
+      name: "Plan Premium",
       price: "$299",
-      description: "Para trabajadores independientes",
+      description: "Para mantenimientos completos",
       features: [
         "Todo del Plan Básico",
-        "Schedule C (negocio)",
-        "Deducciones itemizadas",
-        "Consulta extendida",
-        "Soporte prioritario",
-        "Planificación fiscal básica"
+        "Limpieza profunda de ductos",
+        "Ajuste de componentes",
+        "Inspección detallada",
+        "Prioridad en citas",
+        "Soporte personalizado"
       ],
       highlighted: true
     },
     {
       name: "Plan Empresarial",
       price: "Desde $499",
-      description: "Para negocios establecidos",
+      description: "Para instalaciones y mantenimiento empresarial",
       features: [
-        "Todo del Plan Profesional",
-        "Declaraciones corporativas",
-        "Nómina y empleados",
-        "Planificación fiscal avanzada",
-        "Consultas ilimitadas",
-        "Soporte 24/7"
+        "Todo del Plan Premium",
+        "Instalación de sistemas centralizados",
+        "Mantenimiento de sistemas comerciales",
+        "Diagnóstico avanzado",
+        "Soporte técnico continuo",
+        "Consultas personalizadas"
       ]
     }
   ];
@@ -51,7 +51,7 @@ const PricingPage = () => {
       <div className="py-16 max-w-6xl mx-auto px-4">
         <h1 className="text-4xl font-bold text-center mb-4">Planes y Precios</h1>
         <p className="text-xl text-gray-600 text-center mb-12">
-          Soluciones fiscales adaptadas a tus necesidades
+          Soluciones de climatización e insulación adaptadas a tus necesidades
         </p>
         
         <div className="grid md:grid-cols-3 gap-8">
