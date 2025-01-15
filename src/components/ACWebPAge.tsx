@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Thermometer, Shield, Wrench, Phone, ArrowRight, Clock, MapPin, Facebook, X, ImageIcon } from 'lucide-react';
+import { Thermometer, Shield, Wrench, Phone, ArrowRight, ArrowLeft, Clock, MapPin, Facebook, X, ImageIcon } from 'lucide-react';
 import ChatWidget from './chat/ChatWidget';
+import { useRouter } from 'next/navigation';
 
 // Datos de los servicios
 const SERVICIOS_INFO = {
@@ -29,12 +30,7 @@ const SERVICIOS_INFO = {
     id: 'galeria',
     titulo: "Galería de Trabajos",
     descripcion: "Explora nuestra galería de instalaciones y proyectos completados.",
-    icon: ImageIcon,
-    imagenes: Array.from({ length: 25 }, (_, i) => ({
-      id: i + 1,
-      url: `/images/img${i + 1}.jpg`,
-      alt: `Trabajo de climatización ${i + 1}`
-    }))
+    icon: ImageIcon
   },
   reparacion: {
     id: 'reparacion',
@@ -56,11 +52,13 @@ const SERVICIOS_INFO = {
   }
 };
 
+// Componente principal
 const ElegantACWebsite = () => {
+  const router = useRouter();
+  // Estados
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isServiceModalOpen, setIsServiceModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
   const [formData, setFormData] = useState({
     nombre: '',
     telefono: '',
@@ -69,13 +67,17 @@ const ElegantACWebsite = () => {
     servicio: ''
   });
 
-  const handleServiceClick = (service) => {
-    if (service.id === 'galeria') {
-      // No abrir modal para galería
-      return;
+  // Manejadores de eventos
+  const handleServiceClick = (serviceId) => {
+    const service = SERVICIOS_INFO[serviceId];
+    if (service) {
+      if (service.id === 'galeria') {
+        router.push('/insulacion');
+      } else {
+        setSelectedService(service);
+        setIsServiceModalOpen(true);
+      }
     }
-    setSelectedService(service);
-    setIsServiceModalOpen(true);
   };
 
   const handleSubmit = async (e) => {
@@ -92,11 +94,10 @@ const ElegantACWebsite = () => {
       [name]: value
     }));
   };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1e3a8a] via-[#1e3a8a] to-[#172554]">
-{/* Hero Section */}
-<div className="relative overflow-hidden border-b-4 border-red-600/20">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden border-b-4 border-red-600/20">
         <div className="absolute inset-0 bg-[url('/api/placeholder/1920/1080')] bg-cover bg-center opacity-5"></div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -135,10 +136,13 @@ const ElegantACWebsite = () => {
 
             <div className="relative flex flex-col items-center">
               <div className="w-72 h-72 mx-auto overflow-hidden rounded-full shadow-2xl ring-4 ring-gray-400/20 transition-transform duration-300 hover:scale-105 hover:ring-red-400/30">
-                <img 
-                  src={encodeURI('/images/ACWebPAge.jpg')}
-                  alt="Muñoz A/C Climatización Profesional" 
+                <Image 
+                  src="/images/ACWebPAge.jpg"
+                  alt="Muñoz A/C Climatización Profesional"
+                  width={288}
+                  height={288}
                   className="w-full h-full object-cover transform transition-transform duration-700 hover:scale-110"
+                  priority
                 />
               </div>
               <div className="mt-6 flex items-center justify-center">
@@ -157,8 +161,8 @@ const ElegantACWebsite = () => {
         </div>
       </div>
 
-{/* Services Section with Frame */}
-<div className="border-t-4 border-b-4 border-red-600/20 bg-gray-900/30">
+      {/* Services Section with Frame */}
+      <div className="border-t-4 border-b-4 border-red-600/20 bg-gray-900/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <h2 className="text-4xl font-bold text-center text-white mb-4">
             Nuestros Servicios
@@ -168,7 +172,7 @@ const ElegantACWebsite = () => {
           </p>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {/* Instalación Card */}
+            {/* Card Component - Instalación */}
             <div
               onClick={() => handleServiceClick('instalacion')}
               className="bg-gray-800/30 backdrop-blur-lg rounded-2xl p-8 group hover:bg-gray-800/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl border border-gray-700/50 cursor-pointer transform hover:scale-[1.02]"
@@ -184,23 +188,23 @@ const ElegantACWebsite = () => {
               </p>
             </div>
 
-            {/* Galería Card */}
+            {/* Card Component - Galería */}
             <div
-              onClick={() => setSelectedImage('/images/img1.jpg')} // Puedes ajustar esta acción
+              onClick={() => handleServiceClick('galeria')}
               className="bg-gray-800/30 backdrop-blur-lg rounded-2xl p-8 group hover:bg-gray-800/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl border border-gray-700/50 cursor-pointer transform hover:scale-[1.02]"
             >
               <div className="bg-gradient-to-br from-red-500 to-red-700 w-16 h-16 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
                 <ImageIcon className="w-8 h-8 text-white transition-transform duration-300 group-hover:scale-110" />
               </div>
               <h3 className="text-xl font-bold text-white mb-4 group-hover:text-red-100 transition-colors duration-300">
-                Galería
+                Galería de Trabajos
               </h3>
               <p className="text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
                 Explora nuestra galería de instalaciones y proyectos completados para ver nuestro trabajo de calidad.
               </p>
             </div>
 
-            {/* Reparación Card */}
+            {/* Card Component - Reparación */}
             <div
               onClick={() => handleServiceClick('reparacion')}
               className="bg-gray-800/30 backdrop-blur-lg rounded-2xl p-8 group hover:bg-gray-800/40 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl border border-gray-700/50 cursor-pointer transform hover:scale-[1.02]"
@@ -218,37 +222,10 @@ const ElegantACWebsite = () => {
           </div>
         </div>
       </div>
-
-      {/* Image Modal */}
-      {selectedImage && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
-          onClick={() => setSelectedImage(null)}
-        >
-          <div className="relative max-w-5xl w-full animate-fade-in">
-            <button 
-              className="absolute -top-12 right-0 text-white hover:text-red-500 transition-colors"
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedImage(null);
-              }}
-            >
-              <X className="w-8 h-8" />
-            </button>
-            <img
-              src={selectedImage}
-              alt="Imagen ampliada"
-              className="w-full h-auto rounded-lg shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            />
-          </div>
-        </div>
-      )}
 {/* Features Section */}
 <div className="border-t-4 border-b-4 border-red-600/20 bg-gray-900/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Feature Cards */}
             {[
               { icon: Clock, title: "24/7 Disponible", desc: "Servicio de emergencia" },
               { icon: Shield, title: "Garantía Total", desc: "En todos los servicios" },
@@ -306,7 +283,7 @@ const ElegantACWebsite = () => {
         </div>
       </div>
 
-      {/* Footer with Frame */}
+      {/* Footer */}
       <footer className="border-t-4 border-red-600/20 bg-gray-900/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
@@ -322,7 +299,7 @@ const ElegantACWebsite = () => {
             
             <div className="flex items-center gap-6">
               <a 
-                href="https://www.facebook.com/profile.php?id=100091382791139"
+                href="https://www.facebook.com/munozacinsulations"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-blue-400 transition-colors duration-300"
@@ -334,6 +311,14 @@ const ElegantACWebsite = () => {
                 className="text-white hover:text-red-400 transition-colors duration-300"
               >
                 <Phone className="w-6 h-6" />
+              </a>
+              <a 
+                href="https://www.google.com/maps?q=3825+E+Expressway+83+Weslaco+TX+78599"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-red-400 transition-colors duration-300"
+              >
+                <MapPin className="w-6 h-6" />
               </a>
             </div>
           </div>
@@ -492,11 +477,13 @@ const ElegantACWebsite = () => {
                   className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-red-500 focus:ring-red-500 transition-colors duration-200"
                 >
                   <option value="">Selecciona un servicio</option>
-                  {Object.values(SERVICIOS_INFO).filter(service => service.id !== 'galeria').map((service) => (
-                    <option key={service.id} value={service.id}>
-                      {service.titulo}
-                    </option>
-                  ))}
+                  {Object.values(SERVICIOS_INFO)
+                    .filter(service => service.id !== 'galeria')
+                    .map((service) => (
+                      <option key={service.id} value={service.id}>
+                        {service.titulo}
+                      </option>
+                    ))}
                 </select>
               </div>
               
@@ -570,7 +557,6 @@ const ElegantACWebsite = () => {
           box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
         }
 
-        /* Animated background gradient */
         @keyframes gradientBG {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }

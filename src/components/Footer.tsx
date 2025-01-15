@@ -12,6 +12,15 @@ const Footer = () => {
               <MapPin className="w-4 h-4" />
               Servicios profesionales de climatización e insulación
             </p>
+            <a 
+              href="https://www.google.com/maps?q=3825+E+Expressway+83+Weslaco+TX+78599" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-blue-200 hover:text-blue-100 flex items-start gap-2 mt-2 pl-6"
+            >
+              3825 E Expressway 83<br />
+              Weslaco, TX 78599
+            </a>
           </div>
           <div>
             <h3 className="font-bold text-lg mb-4">Contacto</h3>
