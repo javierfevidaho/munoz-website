@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
@@ -11,7 +11,7 @@ interface Appointment {
   name: string;
   email: string;
   phone: string;
-  address: string; // Agregado para servicios de AC
+  address: string;
   service: string;
   message: string;
   status: string;
@@ -27,12 +27,12 @@ const AppointmentPage = () => {
     name: '',
     email: '',
     phone: '',
-    address: '', // Nuevo campo para dirección
+    address: '',
     message: '',
     service: 'installation',
   });
 
-  const generateTimeSlots = (date: Date | null) => {
+  const generateTimeSlots = useCallback((date: Date | null) => {
     if (!date) return [];
     
     const currentDate = new Date();
@@ -58,16 +58,9 @@ const AppointmentPage = () => {
     }
     
     return slots;
-  };
+  }, []);
 
-  useEffect(() => {
-    if (selectedDate) {
-      setTimeSlots(generateTimeSlots(selectedDate));
-      fetchAppointments();
-    }
-  }, [selectedDate]);
-
-  const fetchAppointments = async () => {
+  const fetchAppointments = useCallback(async () => {
     if (!selectedDate) return;
     try {
       const response = await fetch('/api/appointments');
@@ -77,9 +70,16 @@ const AppointmentPage = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  };
+  }, [selectedDate]);
 
-  const isTimeSlotAvailable = (time: string) => {
+  useEffect(() => {
+    if (selectedDate) {
+      setTimeSlots(generateTimeSlots(selectedDate));
+      fetchAppointments();
+    }
+  }, [selectedDate, generateTimeSlots, fetchAppointments]);
+
+  const isTimeSlotAvailable = useCallback((time: string) => {
     if (!selectedDate) return false;
     
     const now = new Date();
@@ -95,7 +95,7 @@ const AppointmentPage = () => {
         apt.time === time &&
         apt.status !== 'cancelled'
     );
-  };
+  }, [selectedDate, appointments]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -145,9 +145,9 @@ const AppointmentPage = () => {
     if (view === 'month') {
       const day = date.getDay();
       if (day === 0) { // Domingo
-        return 'text-red-500 bg-gray-100'; // Domingo no disponible
+        return 'text-red-500 bg-gray-100';
       } else if (day === 6) { // Sábado
-        return 'text-blue-500'; // Sábado con horario especial
+        return 'text-blue-500';
       }
       return 'text-black';
     }
@@ -163,6 +163,7 @@ const AppointmentPage = () => {
       <div className="max-w-3xl mx-auto">
         <h1 className="text-3xl font-bold text-center mb-8">Agendar Servicio</h1>
         <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-8 space-y-6">
+          {/* Información Personal */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Información Personal</h2>
             <input
@@ -203,6 +204,7 @@ const AppointmentPage = () => {
             />
           </div>
 
+          {/* Tipo de Servicio */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Tipo de Servicio</h2>
             <select
@@ -220,6 +222,7 @@ const AppointmentPage = () => {
             </select>
           </div>
 
+          {/* Calendario */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Selecciona una Fecha</h2>
             <Calendar
@@ -232,6 +235,7 @@ const AppointmentPage = () => {
             />
           </div>
 
+          {/* Horarios */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Selecciona una Hora</h2>
             <div className="grid grid-cols-4 gap-2">
@@ -255,6 +259,7 @@ const AppointmentPage = () => {
             </div>
           </div>
 
+          {/* Descripción */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Descripción del Servicio</h2>
             <textarea
@@ -267,6 +272,7 @@ const AppointmentPage = () => {
             />
           </div>
 
+          {/* Botón de Submit */}
           <button
             type="submit"
             disabled={isLoading || !selectedDate || !selectedTime}

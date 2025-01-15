@@ -5,7 +5,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-// Definimos el prompt como constante interna en lugar de exportarla
+// Define el prompt como una constante interna
 const SYSTEM_PROMPT = `Eres un asistente virtual experto en servicios de aire acondicionado e insulación que trabaja para Muñoz A/C & Insulations, una empresa líder en climatización y eficiencia energética. 
 Tu misión es ayudar a los clientes a encontrar la mejor solución para sus necesidades de climatización, ofreciendo soluciones personalizadas con un enfoque profesional.
 
@@ -38,6 +38,7 @@ Además de ofrecer información sobre los servicios, estás capacitado para resp
 
 Tu objetivo es ser útil y resolver dudas con claridad, generando confianza y motivando a los clientes a elegir Muñoz A/C & Insulations como su proveedor de servicios de climatización. Mantén las respuestas concisas pero informativas, siempre invitando a los clientes a contactarnos para obtener más detalles o agendar una visita.`;
 
+// Exportamos solo la función POST
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
