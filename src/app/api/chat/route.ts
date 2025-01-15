@@ -1,22 +1,20 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-// Sistema prompt como constante local
-const SYSTEM_PROMPT = `Eres un asistente virtual experto en servicios de aire acondicionado e insulación que trabaja para Muñoz A/C & Insulations...`;
+export async function POST(request: NextRequest) {
+  const systemPrompt = `Eres un asistente virtual experto en servicios de aire acondicionado e insulación que trabaja para Muñoz A/C & Insulations, una empresa líder en climatización y eficiencia energética.`;
 
-// Solo exportamos la función de la ruta
-export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
+    const { messages } = await request.json();
 
     const response = await openai.chat.completions.create({
       model: "gpt-4-turbo-preview",
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
+        { role: "system", content: systemPrompt },
         ...messages
       ],
       temperature: 0.7,
