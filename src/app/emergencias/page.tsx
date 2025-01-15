@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Phone, Clock, Shield, Tool, AlertTriangle, ArrowRight } from 'lucide-react';
+import { Phone, Clock, Shield, Wrench, AlertTriangle, ArrowRight } from 'lucide-react';
 
 const EmergencyPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#1e3a8a] via-[#1e3a8a] to-[#172554]">
       {/* Hero Emergency Section */}
-      <div className="relative overflow-hidden border-b-4 border-red-600/20">
+      <div className="relative overflow-hidden border-b-4 border-red-600/20 pt-20">
         <div className="absolute inset-0 bg-[url('/api/placeholder/1920/1080')] bg-cover bg-center opacity-5"></div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
@@ -44,7 +44,7 @@ const EmergencyPage = () => {
                 description: "Atendemos tu emergencia en menos de 2 horas para restaurar tu comodidad lo antes posible."
               },
               {
-                icon: Tool,
+                icon: Wrench,
                 title: "Reparación Inmediata",
                 description: "Diagnosticamos y reparamos el problema en el momento, con las herramientas y repuestos necesarios."
               },
