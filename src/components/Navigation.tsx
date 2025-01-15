@@ -1,65 +1,77 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Thermometer, Menu, X } from 'lucide-react';
+import { Thermometer, Menu, X, Phone } from 'lucide-react';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
   return (
-    <nav className="bg-blue-900 text-white shadow-lg">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <nav className={`fixed w-full z-50 transition-all duration-300 ${
+      scrolled ? 'bg-blue-900/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
+    }`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-              <Thermometer className="w-8 h-8 text-blue-900" />
+          <Link href="/" className="flex items-center space-x-3 group">
+            <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
+              <Thermometer className="w-7 h-7 text-white" />
             </div>
-            <div>
-              <span className="text-xl font-bold block">Muñoz A/C</span>
-              <span className="text-xs text-blue-200">& Insulations</span>
+            <div className="transform transition-transform duration-300 group-hover:translate-x-1">
+              <span className="text-xl font-bold block text-white">Muñoz A/C</span>
+              <span className="text-sm text-gray-300">Climatización Profesional</span>
             </div>
-          </div>
+          </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-6">
-            <Link href="/" className="text-white hover:text-blue-200 transition-colors">
-              Inicio
-            </Link>
-            <Link href="/servicios" className="text-white hover:text-blue-200 transition-colors">
-              Servicios
-            </Link>
-            <Link href="/insulacion" className="text-white hover:text-blue-200 transition-colors">
-              Insulación
-            </Link>
-            <Link href="/emergencias" className="text-white hover:text-blue-200 transition-colors">
-              Emergencias
-            </Link>
-            <Link href="/contacto" className="text-white hover:text-blue-200 transition-colors">
-              Contacto
-            </Link>
-          </div>
-
-          {/* Call to Action Button - Desktop */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link 
-              href="/presupuesto" 
-              className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
-            >
-              Solicitar Presupuesto
-            </Link>
+          <div className="hidden md:flex items-center space-x-1">
+            {[
+              { href: '/', label: 'Inicio' },
+              { href: '/servicios', label: 'Servicios' },
+              { href: '/insulacion', label: 'Galería' },
+              { href: '/emergencias', label: 'Emergencias' },
+              { href: '/contacto', label: 'Contacto' }
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="relative px-4 py-2 text-white hover:text-red-100 transition-colors duration-300 group"
+              >
+                <span>{item.label}</span>
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red-500 transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
+              </Link>
+            ))}
+            <div className="ml-6 flex items-center space-x-4">
+              <a
+                href="tel:+19565212480"
+                className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+              >
+                <Phone className="w-4 h-4" />
+                <span className="text-sm font-medium">Llamar Ahora</span>
+              </a>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
               onClick={toggleMenu}
-              className="text-white hover:text-blue-200 focus:outline-none"
+              className="text-white p-2 rounded-lg hover:bg-white/10 transition-colors duration-300 focus:outline-none"
               aria-label="Toggle menu"
             >
               {isOpen ? (
@@ -73,48 +85,67 @@ const Navigation = () => {
       </div>
 
       {/* Mobile Menu */}
-      {isOpen && (
-        <div className="md:hidden bg-blue-800">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link 
-              href="/" 
-              className="block px-3 py-2 rounded-md text-white hover:bg-blue-700 transition-colors"
+      <div
+        className={`md:hidden fixed inset-0 z-50 transform transition-transform duration-300 ease-in-out ${
+          isOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900 to-blue-800 backdrop-blur-lg">
+          <div className="flex flex-col h-full pt-20 px-4">
+            {[
+              { href: '/', label: 'Inicio' },
+              { href: '/servicios', label: 'Servicios' },
+              { href: '/insulacion', label: 'Galería' },
+              { href: '/emergencias', label: 'Emergencias' },
+              { href: '/contacto', label: 'Contacto' }
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+                className="py-4 text-lg text-white hover:text-red-100 transition-colors duration-300 border-b border-white/10"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <a
+              href="tel:+19565212480"
+              className="mt-8 flex items-center justify-center gap-2 bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-all duration-300"
             >
-              Inicio
-            </Link>
-            <Link 
-              href="/servicios" 
-              className="block px-3 py-2 rounded-md text-white hover:bg-blue-700 transition-colors"
-            >
-              Servicios
-            </Link>
-            <Link 
-              href="/insulacion" 
-              className="block px-3 py-2 rounded-md text-white hover:bg-blue-700 transition-colors"
-            >
-              Insulación
-            </Link>
-            <Link 
-              href="/emergencias" 
-              className="block px-3 py-2 rounded-md text-white hover:bg-blue-700 transition-colors"
-            >
-              Emergencias
-            </Link>
-            <Link 
-              href="/contacto" 
-              className="block px-3 py-2 rounded-md text-white hover:bg-blue-700 transition-colors"
-            >
-              Contacto
-            </Link>
-            <Link 
-              href="/presupuesto" 
-              className="block px-3 py-2 mt-4 text-center bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
-            >
-              Solicitar Presupuesto
-            </Link>
+              <Phone className="w-5 h-5" />
+              <span className="font-medium">Llamar Ahora</span>
+            </a>
           </div>
         </div>
-      )}
+      </div>
+
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .menu-item-hover {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .menu-item-hover::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background-color: currentColor;
+          transform: scaleX(0);
+          transition: transform 0.3s ease;
+        }
+
+        .menu-item-hover:hover::after {
+          transform: scaleX(1);
+        }
+      `}</style>
     </nav>
   );
 };

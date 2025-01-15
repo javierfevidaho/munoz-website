@@ -6,23 +6,23 @@
       "dom.iterable",
       "esnext"
     ], // Soporte para navegadores modernos y las API más recientes.
-    "allowJs": true, // Permite archivos .js junto con .ts.
-    "skipLibCheck": true, // Omite la verificación de tipos en bibliotecas para mejorar la velocidad de compilación.
-    "strict": true, // Habilita estrictas verificaciones de tipo (muy recomendado).
-    "forceConsistentCasingInFileNames": true, // Previene errores por diferencias en mayúsculas y minúsculas en nombres de archivo.
-    "noEmit": true, // No genera archivos .js, ya que Next.js maneja el build.
+    "allowJs": true, // Permite usar archivos .js junto con .ts.
+    "skipLibCheck": true, // Omite la verificación de tipos en bibliotecas para mejorar la velocidad.
+    "strict": true, // Habilita verificaciones de tipo estrictas.
+    "forceConsistentCasingInFileNames": true, // Previene errores por diferencias de mayúsculas/minúsculas.
+    "noEmit": true, // No genera archivos .js; Next.js maneja el build.
     "esModuleInterop": true, // Mejora la interoperabilidad con módulos CommonJS y ESModule.
     "module": "ESNext", // Usa módulos modernos.
     "moduleResolution": "node", // Resolución de módulos compatible con Node.js.
     "resolveJsonModule": true, // Permite importar archivos JSON.
-    "isolatedModules": true, // Necesario para el uso de TypeScript con Next.js.
-    "jsx": "preserve", // Mantiene el JSX para que lo procese Next.js.
+    "isolatedModules": true, // Necesario para TypeScript con Next.js.
+    "jsx": "preserve", // Mantiene el JSX para que Next.js lo procese.
     "incremental": true, // Habilita compilaciones incrementales para mejorar el rendimiento.
     "baseUrl": ".", // Establece la raíz del proyecto.
     "paths": {
       "@/*": [
-        "./src/*"
-      ] // Alias para rutas absolutas.
+        "src/*"
+      ] // Configuración del alias `@` para rutas absolutas.
     },
     "plugins": [
       {
@@ -32,14 +32,15 @@
   },
   "include": [
     "next-env.d.ts", // Tipos generados automáticamente por Next.js.
-    "**/*.ts", // Incluye todos los archivos .ts.
-    "**/*.tsx", // Incluye todos los archivos .tsx.
+    "**/*.ts", // Incluye todos los archivos TypeScript.
+    "**/*.tsx", // Incluye todos los archivos TypeScript con JSX.
     ".next/types/**/*.ts" // Incluye tipos generados por Next.js.
   ],
   "exclude": [
     "node_modules", // Excluye los módulos de Node.js.
-    "**/*.test.ts", // Opcional: excluye archivos de prueba.
-    "**/*.spec.ts", // Opcional: excluye archivos de pruebas unitarias.
-    "**/__tests__/**" // Opcional: excluye carpetas específicas para pruebas.
+    ".next", // Excluye la carpeta generada por Next.js.
+    "**/*.test.ts", // Excluye archivos de prueba (opcional).
+    "**/*.spec.ts", // Excluye archivos de pruebas unitarias (opcional).
+    "**/__tests__/**" // Excluye carpetas específicas para pruebas (opcional).
   ]
 }

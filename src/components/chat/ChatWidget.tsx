@@ -80,7 +80,7 @@ export default function ChatWidget() {
       ) : (
         <div className="fixed bottom-6 right-6 w-96 h-[500px] bg-white rounded-lg shadow-xl flex flex-col">
           <div className="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
-            <h3 className="font-semibold">Asistente Virtual GEMTAX</h3>
+            <h3 className="font-semibold">Asistente Virtual Muñosz A/C Insulations</h3>
             <button 
               onClick={() => setChatOpen(false)}
               className="hover:bg-blue-700 rounded-full p-1 transition-colors duration-200"
@@ -93,7 +93,7 @@ export default function ChatWidget() {
           <div className="flex-1 p-4 overflow-y-auto bg-gray-50">
             {messages.length === 0 && (
               <div className="bg-blue-100 p-3 rounded-lg mb-2 max-w-[80%]">
-                ¡Hola! Soy el asistente virtual de GEMTAX. ¿En qué puedo ayudarte?
+                ¡Hola! Soy el asistente virtual de Muñoz A/C Insulations. ¿En qué puedo ayudarte?
               </div>
             )}
             

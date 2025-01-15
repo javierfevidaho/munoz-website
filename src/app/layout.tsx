@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={`${inter.className} bg-gray-50 text-gray-800 antialiased`}>
         <div className="flex flex-col min-h-screen">
           {/* Barra de Navegación */}
-          <header className="bg-blue-700 shadow-md">
+          <header className="bg-primary-600 shadow-md">
             <Navigation /> {/* Asegúrate de que Navigation sea funcional */}
           </header>
 
@@ -34,7 +34,7 @@ export default function RootLayout({
           </main>
 
           {/* Pie de Página */}
-          <footer className="bg-gray-800 text-white py-4">
+          <footer className="bg-gray-900 text-white py-4">
             <Footer />
           </footer>
         </div>
