@@ -11,7 +11,7 @@ const PromoSection = () => {
   };
 
   const handleAddressClick = () => {
-    window.open('https://www.google.com/maps?q=3825+E+Expressway+83+Weslaco+TX+78599', '_blank');
+    window.open('https://www.google.com/maps/place/10890+Red+I+Ranch+County+Rd,+Raymondville,+TX+78580/@26.4891209,-97.8321684,789m/data=!3m2!1e3!4b1!4m5!3m4!1s0x86658bd599c11215:0x8cf0a96bab7fa248!8m2!3d26.4891209!4d-97.8321684?entry=ttu&g_ep=EgoyMDI1MDExNC4wIKXMDSoASAFQAw%3D%3D', '_blank');
   };
 
   return (
@@ -42,7 +42,9 @@ const PromoSection = () => {
             className="flex items-center gap-2 text-white hover:text-blue-200 transition-colors"
           >
             <MapPin className="w-5 h-5" />
-            3825 E Expressway 83, Weslaco, TX 78599
+            10890 Red I Ranch County Rd
+            Raymondville Tx
+            78580
           </button>
         </div>
       </div>

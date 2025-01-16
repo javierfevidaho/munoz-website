@@ -13,12 +13,13 @@ const Footer = () => {
               Servicios profesionales de climatización e insulación
             </p>
             <a 
-              href="https://www.google.com/maps?q=3825+E+Expressway+83+Weslaco+TX+78599" 
+              href="https://www.google.com/maps/place/10890+Red+I+Ranch+County+Rd,+Raymondville,+TX+78580/@26.4891209,-97.8321684,789m/data=!3m2!1e3!4b1!4m5!3m4!1s0x86658bd599c11215:0x8cf0a96bab7fa248!8m2!3d26.4891209!4d-97.8321684?entry=ttu&g_ep=EgoyMDI1MDExNC4wIKXMDSoASAFQAw%3D%3D" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="text-blue-200 hover:text-blue-100 flex items-start gap-2 mt-2 pl-6"
             >
-              3825 E Expressway 83<br />
+              10890 Red I Ranch County Rd
+              Raymondville Tx 78580<br />
               Weslaco, TX 78599
             </a>
           </div>
