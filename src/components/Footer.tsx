@@ -20,8 +20,7 @@ const Footer = () => {
             >
               10890 Red I Ranch County Rd
               Raymondville Tx 78580<br />
-              Weslaco, TX 78599
-            </a>
+                          </a>
           </div>
           <div>
             <h3 className="font-bold text-lg mb-4">Contacto</h3>
