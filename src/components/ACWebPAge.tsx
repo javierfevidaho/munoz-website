@@ -47,7 +47,7 @@ const SERVICIOS_INFO = {
       "Garantía en reparaciones"
     ],
     icon: Wrench,
-    precios: "Diagnóstico desde $50",
+    precios: "Diagnóstico desde $85",
     tiempo: "Respuesta en menos de 2 horas para emergencias"
   }
 };
