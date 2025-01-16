@@ -76,7 +76,7 @@ export const SERVICIOS_INFO = {
       "Garantía en reparaciones"
     ],
     icon: Wrench,
-    precios: "Diagnóstico: $50 + reparación según requerimiento",
+    precios: "Diagnóstico: $85 + reparación según requerimiento",
     tiempo: "Respuesta en menos de 2 horas para emergencias",
     beneficios: [
       "Atención inmediata",
